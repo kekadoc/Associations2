@@ -79,7 +79,7 @@ fun MainContent(viewModel: AppViewModel) {
 @Composable
 fun AddingPropertyDialog(
     onCancel: () -> Unit,
-    onCommit: (property: String, value: String) -> Unit
+    onCommit: (property: String, value: String) -> Unit,
 ) {
     var propertyText by remember { mutableStateOf("") }
     var valueText by remember { mutableStateOf("") }
@@ -129,7 +129,7 @@ fun AddingPropertyValueDialog(
     value: String,
     property: String,
     onCancel: () -> Unit,
-    onCommitValue: (String) -> Unit
+    onCommitValue: (String) -> Unit,
 ) {
     var valueText by remember { mutableStateOf(value) }
     Dialog(
@@ -173,7 +173,7 @@ private fun Content(
     onAddPropertyValueAction: (String) -> Unit,
     onSetPropertyValueAction: (String, String) -> Unit,
     onDeletePropertyValue: (String, String) -> Unit,
-    onDeleteProperty: (String) -> Unit
+    onDeleteProperty: (String) -> Unit,
 ) {
     Column(
         modifier = Modifier.fillMaxSize().padding(16.dp)
@@ -267,7 +267,7 @@ private fun ValueCompoenent(
     value: String,
     onClick: () -> Unit,
     onEdit: () -> Unit,
-    onDelete: () -> Unit
+    onDelete: () -> Unit,
 ) {
     Card(
         modifier = Modifier.wrapContentSize().height(36.dp),
