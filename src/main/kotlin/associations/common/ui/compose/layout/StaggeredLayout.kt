@@ -14,7 +14,7 @@ fun StaggeredLayout(
     modifier: Modifier = Modifier,
     horizontalArrangement: Arrangement.Horizontal = Arrangement.Center,
     verticalAlignment: Arrangement.Vertical = Arrangement.Center,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     Layout(
         modifier = modifier,
@@ -29,13 +29,13 @@ fun StaggeredLayout(
 
 private class StaggeredLayoutMeasurePolicy(
     private val horizontalArrangement: Arrangement.Horizontal = Arrangement.Center,
-    private val verticalAlignment: Arrangement.Vertical = Arrangement.Center
+    private val verticalAlignment: Arrangement.Vertical = Arrangement.Center,
 ) : MeasurePolicy {
     override fun MeasureScope.measure(measurables: List<Measurable>, constraints: Constraints): MeasureResult {
-    
+        
         val horizontalArrangementSpacing = horizontalArrangement.spacing.roundToPx()
         val verticalArrangementSpacing = verticalAlignment.spacing.roundToPx()
-    
+        
         val placeables = measurables.map { measurable -> measurable.measure(constraints) }
         
         val wrapContentHeight = measureMinHeight(
@@ -84,7 +84,7 @@ private class StaggeredLayoutMeasurePolicy(
         constraints: Constraints,
         horizontalSpacing: Int,
         verticalSpacing: Int,
-        placeables: List<Placeable>
+        placeables: List<Placeable>,
     ): Int {
         var minHeight = 0
         var rowWidth = 0
