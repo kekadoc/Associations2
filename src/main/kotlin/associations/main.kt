@@ -16,7 +16,7 @@ fun main() = application {
         )
     }
     Mock.DefaultElement
-    Window(onCloseRequest = ::exitApplication) {
+    Window(onCloseRequest = ::exitApplication, title = "Семантическая сеть") {
         MainContent(koinApplication.koin.get())
     }
 }

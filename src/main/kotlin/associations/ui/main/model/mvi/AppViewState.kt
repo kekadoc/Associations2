@@ -7,5 +7,6 @@ data class AppViewState(
     val isSearchLoading: Boolean = false,
     val isElementModificationLoading: Boolean = false,
     val searchValue: String = Mock.DefaultElement.value,
-    val currentElement: Element? = null
+    val currentElement: Element? = null,
+    val hasPreviewElement: Boolean = false
 )

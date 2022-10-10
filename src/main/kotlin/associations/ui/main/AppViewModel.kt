@@ -1,10 +1,10 @@
 package associations.ui.main
 
 import associations.common.ViewModel
+import associations.data.model.Element
 import associations.data.repository.AssociationsRepository
 import associations.ui.main.model.mvi.AppSideEffect
 import associations.ui.main.model.mvi.AppViewState
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
 import org.orbitmvi.orbit.Container
 import org.orbitmvi.orbit.ContainerHost
@@ -21,6 +21,8 @@ class AppViewModel(
         search()
     }
     
+    private val backStack = mutableSetOf<Element>()
+    
     fun onValueChanged(value: String) = intent {
         reduce { state.copy(searchValue = value) }
     }
@@ -28,14 +30,35 @@ class AppViewModel(
     fun searchValue(value: String) = intent {
         reduce { state.copy(isSearchLoading = true, searchValue = value) }
         val element = repository.get(value).first()
-        reduce { state.copy(isSearchLoading = false, currentElement = element) }
+        val currentElement = state.currentElement
+        if (currentElement != null && element != currentElement) {
+            backStack.add(currentElement)
+        }
+        reduce {
+            state.copy(
+                searchValue = value,
+                isSearchLoading = false,
+                currentElement = element,
+                hasPreviewElement = backStack.size > 0
+            )
+        }
+    }
+    
+    fun back() = intent {
+        val lastBackStackElement = backStack.lastOrNull()
+        backStack.remove(lastBackStackElement)
+        reduce {
+            state.copy(
+                searchValue = lastBackStackElement?.value.orEmpty(),
+                currentElement = lastBackStackElement,
+                hasPreviewElement = backStack.size > 0
+            )
+        }
     }
     
     fun search() = intent {
         if (state.searchValue.isEmpty()) return@intent
-        reduce { state.copy(isSearchLoading = true) }
-        val element = repository.get(state.searchValue).first()
-        reduce { state.copy(isSearchLoading = false, currentElement = element) }
+        searchValue(state.searchValue)
     }
     
     fun addPropertyAction() = intent {

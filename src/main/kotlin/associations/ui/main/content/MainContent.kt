@@ -64,6 +64,7 @@ fun MainContent(viewModel: AppViewModel) {
         Content(
             state = state,
             onSearchAction = viewModel::search,
+            onBack = viewModel::back,
             onSearchValue = viewModel::searchValue,
             onValueChanged = viewModel::onValueChanged,
             onAddPropertyAction = viewModel::addPropertyAction,
@@ -167,6 +168,7 @@ fun AddingPropertyValueDialog(
 private fun Content(
     state: AppViewState,
     onValueChanged: (String) -> Unit,
+    onBack: () -> Unit,
     onSearchAction: () -> Unit,
     onSearchValue: (String) -> Unit,
     onAddPropertyAction: () -> Unit,
@@ -182,6 +184,19 @@ private fun Content(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally)
         ) {
+            Button(
+                modifier = Modifier.size(44.dp).align(Alignment.CenterVertically),
+                onClick = onBack,
+                enabled = state.hasPreviewElement,
+                contentPadding = PaddingValues(0.dp)
+            ) {
+                Image(
+                    modifier = Modifier,
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = null,
+                    colorFilter = ColorFilter.tint(MaterialTheme.colors.onPrimary)
+                )
+            }
             OutlinedTextField(
                 modifier = Modifier,
                 value = state.searchValue,

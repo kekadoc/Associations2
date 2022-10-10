@@ -11,13 +11,13 @@ import org.koin.core.component.get
 object Mock : KoinComponent {
     val DefaultElement: Element by lazy {
         runBlocking {
-            val target = "Карьер"
+            val target = "поиск полезных ископаемых"
             val repository = get<AssociationsRepository>()
             repository.apply {
-                this.setPropertyValue(target = target, property = "Ископаемые","Золото", "Серебро", "Медь", "Олово").collect()
-                this.setPropertyValue(target = target, property = "Расположение","Россия").collect()
-                this.setPropertyValue(target = target, property = "Глубина залегания",">10км").collect()
-                this.setPropertyValue(target = target, property = "Метод добычи","Копать", "Ломать").collect()
+                this.setPropertyValue(target = target, property = "Ископаемые","Золото", "Медь", "Серебро").collect()
+                this.setPropertyValue(target = target, property = "Расположение","Сибирь").collect()
+                this.setPropertyValue(target = target, property = "Глубина залегания",">100м", "<1км").collect()
+                this.setPropertyValue(target = target, property = "Метод добычи","Карьерный", "Шахтный", "Скважинный").collect()
             }
             repository.get(target).first()
         }
