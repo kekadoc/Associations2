@@ -5,6 +5,8 @@ package associations.ui.main.content
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -178,7 +180,9 @@ private fun Content(
     onDeleteProperty: (String) -> Unit,
 ) {
     Column(
-        modifier = Modifier.fillMaxSize().padding(16.dp)
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -219,58 +223,62 @@ private fun Content(
             }
         }
         Spacer(modifier = Modifier.height(36.dp))
-        state.currentElement?.let { element ->
-            element.parts.forEach { (property, values) ->
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    IconButton(onClick = { onDeleteProperty.invoke(property) }) {
-                        Icon(
-                            imageVector = Icons.Default.Close,
-                            contentDescription = null
+        Column(
+            modifier = Modifier.weight(1f).verticalScroll(rememberScrollState())
+        ) {
+            state.currentElement?.let { element ->
+                element.parts.forEach { (property, values) ->
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        IconButton(onClick = { onDeleteProperty.invoke(property) }) {
+                            Icon(
+                                imageVector = Icons.Default.Close,
+                                contentDescription = null
+                            )
+                        }
+                        Text(
+                            text = property,
+                            style = MaterialTheme.typography.h6
                         )
                     }
-                    Text(
-                        text = property,
-                        style = MaterialTheme.typography.h6
-                    )
-                }
-                StaggeredLayout(
-                    modifier = Modifier.wrapContentHeight().padding(12.dp),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    verticalAlignment = Arrangement.spacedBy(8.dp)
-                ) {
-                    CompositionLocalProvider(LocalMinimumTouchTargetEnforcement provides false) {
-                        values.forEach { value ->
-                            ValueCompoenent(
-                                value = value,
-                                onClick = { onSearchValue.invoke(value) },
-                                onEdit = { onSetPropertyValueAction.invoke(property, value) },
-                                onDelete = { onDeletePropertyValue.invoke(property, value) }
-                            )
-                        }
-                        Card(
-                            modifier = Modifier.size(36.dp),
-                            elevation = 3.dp,
-                            backgroundColor = MaterialTheme.colors.primary,
-                            onClick = { onAddPropertyValueAction.invoke(property) }
-                        ) {
-                            Image(
-                                modifier = Modifier.fillMaxSize(),
-                                imageVector = Icons.Default.Add,
-                                contentDescription = null,
-                                colorFilter = ColorFilter.tint(MaterialTheme.colors.onPrimary)
-                            )
+                    StaggeredLayout(
+                        modifier = Modifier.wrapContentHeight().padding(12.dp),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalAlignment = Arrangement.spacedBy(8.dp)
+                    ) {
+                        CompositionLocalProvider(LocalMinimumTouchTargetEnforcement provides false) {
+                            values.forEach { value ->
+                                ValueCompoenent(
+                                    value = value,
+                                    onClick = { onSearchValue.invoke(value) },
+                                    onEdit = { onSetPropertyValueAction.invoke(property, value) },
+                                    onDelete = { onDeletePropertyValue.invoke(property, value) }
+                                )
+                            }
+                            Card(
+                                modifier = Modifier.size(36.dp),
+                                elevation = 3.dp,
+                                backgroundColor = MaterialTheme.colors.primary,
+                                onClick = { onAddPropertyValueAction.invoke(property) }
+                            ) {
+                                Image(
+                                    modifier = Modifier.fillMaxSize(),
+                                    imageVector = Icons.Default.Add,
+                                    contentDescription = null,
+                                    colorFilter = ColorFilter.tint(MaterialTheme.colors.onPrimary)
+                                )
+                            }
                         }
                     }
+                    Divider()
                 }
-                Divider()
-            }
-            Box(
-                modifier = Modifier.padding(16.dp)
-            ) {
-                Button(onClick = { onAddPropertyAction.invoke() }) {
-                    Text("Добавить свойство")
+                Box(
+                    modifier = Modifier.padding(16.dp)
+                ) {
+                    Button(onClick = { onAddPropertyAction.invoke() }) {
+                        Text("Добавить свойство")
+                    }
                 }
             }
         }
